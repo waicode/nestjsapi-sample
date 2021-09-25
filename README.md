@@ -1,73 +1,92 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# 📕 NestJS Practical Learning Contents
+* NestJS初学者向けの **実践を意識したサンプルアプリケーション構築** の教材です。
+* 他APIに通信して結果を返却するBFF（Backend for Frontend）を想定して課題を設定しています。
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+<br />
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# 🔥 Challenge
 
-## Description
+## Overview
+* Qiita記事情報を返却するREST APIを「NestJS」で構築してください。
+  * 指定した件数の最新Qiita記事のタイトルと作成日時を返却します。
+  * リクエストエラーとシステムエラーも返却してください。
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Detail
 
-## Installation
+### Request
 
-```bash
-$ npm install
+`GET /qiita/items?count=3`
+
+* GETリクエストで、パスは`/qiita/items`で、クエリストリングとして`count`（任意項目）
+* `count`の指定が無い場合は、`count`を1として処理して最新の1件のみ返却する
+
+### Response
+
+#### 正常
+
+* 最新Qiita記事のタイトルと作成日時を配列で作成日時の降順で返却
+* JSONルートはオブジェクト`{}`で、`results`項目として配列で返却
+* タイトルは`title`、作成日時は`created_at`
+* 返却する件数はリクエストでパラメータ（クエリストリング）指定した数
+
+```
+{
+  "results": [
+    {
+      "title": "タイトル1"
+      "created_at": "2000-03-01T00:00:00+00:00"
+    },
+    {
+      "title": "タイトル2"
+      "created_at": "2000-02-01T00:00:00+00:00"
+    },
+    {
+      "title": "タイトル3"
+      "created_at": "2000-01-01T00:00:00+00:00"
+    }
+  ]
+}
 ```
 
-## Running the app
+#### 異常
 
-```bash
-# development
-$ npm run start
+##### リクエストエラー
 
-# watch mode
-$ npm run start:dev
+* リクエストが不正な場合は「リクエストエラー」のメッセージを返却
+* 以下のケースをリクエストエラーと判定
+  * パスが間違っているとき
+  * `count`が10より大きいとき
 
-# production mode
-$ npm run start:prod
+```
+{
+  "errors": [
+    {
+      "message": "リクエストエラー"
+    }
+  ]
+}
 ```
 
-## Test
+##### システムエラー
 
-```bash
-# unit tests
-$ npm run test
+* 予期しない例外が発生したときは「システムエラー」のメッセージを返却
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```
+{
+  "errors": [
+    {
+      "message": "システムエラー"
+    }
+  ]
+}
 ```
 
-## Support
+<br />
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# 💡 Hint
 
-## Stay in touch
+## Qiitaの記事情報にアクセスするには？
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+* 構築するREST APIの中で外部の別のREST API（Qiita API）を呼びます
+  * `GET https://qiita.com/api/v2/items`
+* Qiita APIは認証しない状態でもIPアドレスごとに1時間に60回までリクエスト可能です
