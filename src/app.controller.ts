@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { QiitaService } from './qiita/qiita.service';
 
 @Controller()
@@ -6,8 +7,7 @@ export class AppController {
   constructor(private readonly qiitaService: QiitaService) {}
 
   @Get()
-  getQiitaItem(): any {
-    const items = this.qiitaService.getItems();
-    return items;
+  getQiitaItem(): Observable<{ id: string; title: string }[]> {
+    return this.qiitaService.getItems();
   }
 }
