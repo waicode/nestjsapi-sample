@@ -1,4 +1,4 @@
-# 📕 NestJS Practical Learning Contents
+# 🐺 NestJS Practical Learning Contents
 * NestJS初学者向けの **実践を意識したサンプルアプリケーション構築** の教材です。
 * 他APIに通信して結果を返却するBFF（Backend for Frontend）を想定して課題を設定しています。
 
