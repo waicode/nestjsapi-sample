@@ -1,5 +1,10 @@
-import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import {
+  BadRequestException,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Query,
+} from '@nestjs/common';
 import { QiitaService } from './qiita.service';
 
 @Controller('qiita')
@@ -7,10 +12,10 @@ export class QiitaController {
   constructor(private readonly qiitaService: QiitaService) {}
 
   @Get('/items')
-  getQiitaItem(
-    @Query('count', ParseIntPipe) count,
-  ): Observable<{ title: string; created_at: string }[]> {
-    console.log('count', count);
+  getQiitaItem(@Query('count', ParseIntPipe) count) {
+    if (count > 10) {
+      throw new BadRequestException();
+    }
     return this.qiitaService.getItems(count);
   }
 }
